@@ -4,15 +4,15 @@ import hmac
 import hashlib
 import json
 
-from config import api_key, secret_key
+from config import bybit_api_key, bybit_secret_key
 # Base URL for Bybit API
-BASE_URL = "https://api.bytick.com"
-RECV_WINDOW = str(5000)
+BASE_URL = "https://api.bybit.com"
+RECV_WINDOW = str(100000)
 
 
 # Function to generate signature
-def get_signature(api_key, secret_key, payload, timestamp):
-    param_str = str(timestamp) + api_key + RECV_WINDOW + payload
+def get_signature(bybit_api_key, secret_key, payload, timestamp):
+    param_str = str(timestamp) + bybit_api_key + RECV_WINDOW + payload
     hash = hmac.new(bytes(secret_key, "utf-8"), param_str.encode("utf-8"), hashlib.sha256)
     return hash.hexdigest()
 
@@ -23,9 +23,9 @@ def http_request(endpoint, method, payload, info):
     print(f"Request URL: {BASE_URL + endpoint}, Method: {method}, Params: {payload}")
 
     # Get the signature for the request
-    signature = get_signature(api_key, secret_key, payload, timestamp)
+    signature = get_signature(bybit_api_key, bybit_secret_key, payload, timestamp)
     headers = {
-        'X-BAPI-API-KEY': api_key,
+        'X-BAPI-API-KEY': bybit_api_key,
         'X-BAPI-SIGN': signature,
         'X-BAPI-SIGN-TYPE': '2',
         'X-BAPI-TIMESTAMP': timestamp,

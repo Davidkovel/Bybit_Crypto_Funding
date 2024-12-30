@@ -1,1 +1,2 @@
-config.py
+./binance/config.py
+./bybit/config.py
